@@ -20,6 +20,7 @@ def profile_epic_data(file_path: str, columns_to_profile: Optional[List[str]] = 
         - sample: Up to 3 example values from the column
     - Warnings: Detects possible outliers (numeric columns) and mixed types (non-numeric columns with mostly numeric values).
     - Errors: Returns a list of errors (e.g., missing columns, unsupported file type, file load failure).
+    - Logging: Logs key events, errors, and warnings for traceability and debugging.
 
     Example output:
         {
@@ -71,25 +72,34 @@ def profile_epic_data(file_path: str, columns_to_profile: Optional[List[str]] = 
     errors = []
     warnings = []
 
+    logging.info(f"Loading file: {file_path}")
     # --- Load data from file ---
     try:
         if file_path.endswith('.csv'):
             df = pd.read_csv(file_path)  # Load CSV
+            logging.info("Loaded CSV file successfully.")
         elif file_path.endswith('.json'):
             df = pd.read_json(file_path)  # Load JSON
+            logging.info("Loaded JSON file successfully.")
         elif file_path.endswith('.parquet'):
             df = pd.read_parquet(file_path)  # Load Parquet
+            logging.info("Loaded Parquet file successfully.")
         else:
-            errors.append(f"Unsupported file type: {file_path}")
+            error_msg = f"Unsupported file type: {file_path}"
+            logging.error(error_msg)
+            errors.append(error_msg)
             return {'summary': {}, 'errors': errors}
     except Exception as e:
-        errors.append(f"Failed to load file: {str(e)}")
+        error_msg = f"Failed to load file: {str(e)}"
+        logging.error(error_msg)
+        errors.append(error_msg)
         return {'summary': {}, 'errors': errors}
 
     # --- Select columns to profile ---
     if columns_to_profile:
         missing_cols = [col for col in columns_to_profile if col not in df.columns]
         if missing_cols:
+            logging.warning(f"Missing columns: {missing_cols}")
             errors.append(f"Missing columns: {missing_cols}")
         cols = [col for col in columns_to_profile if col in df.columns]
     else:
@@ -97,6 +107,7 @@ def profile_epic_data(file_path: str, columns_to_profile: Optional[List[str]] = 
 
     # --- Profile each column ---
     for col in cols:
+        logging.info(f"Profiling column: {col}")
         col_data = df[col]
         col_summary = {}
         # Data type
@@ -120,15 +131,18 @@ def profile_epic_data(file_path: str, columns_to_profile: Optional[List[str]] = 
                 iqr = q3 - q1
                 outliers = col_data[(col_data < q1 - 1.5 * iqr) | (col_data > q3 + 1.5 * iqr)]
                 if len(outliers) > 0:
+                    logging.warning(f"Possible outliers detected in column: {col}")
                     col_summary.setdefault('warnings', []).append('Possible outliers detected')
         else:
             # --- Non-numeric column: check for mixed types ---
             if col_data.apply(lambda x: isinstance(x, (int, float)) or pd.isna(x)).sum() < len(col_data) * 0.8:
+                logging.warning(f"Non-numeric values in mostly numeric column: {col}")
                 col_summary.setdefault('warnings', []).append('Non-numeric values in mostly numeric column')
 
         summary[col] = col_summary
 
     # --- Return structured summary and errors ---
+    logging.info("Profiling complete.")
     return {'summary': summary, 'errors': errors}
 
 if __name__ == "__main__":
