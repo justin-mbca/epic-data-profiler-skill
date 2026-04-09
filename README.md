@@ -61,10 +61,10 @@ This project is designed to fully address the “Data Engineering Take‑Home Ex
 
 **Part 2 — Technical Implementation:**
 - **Language:** Implemented in Python.
-- **Runnable:** Install dependencies with `pip install -r requirements.txt` and invoke via CLI or Python import (see Usage section).
+- **Runnable:** Install dependencies with `pip install -r requirements.txt` and invoke via CLI (see Usage section).
 - **Tool‑call compatible:** Exposes a clear function signature `profile_epic_data(...)` that can be registered as an LLM tool/function (e.g., OpenAI‑style function calling or LangChain tools).
 - **Tests:** Includes tests under `tests/` that validate parsing, missing‑value detection, and edge cases.
-- **Data pipeline hygiene:** Uses schema‑aware parsing, type inference, missing‑value checks, and structured error/warning reporting for robust, trustworthy results.
+- **Data pipeline hygiene:** Implements schema validation, type inference, missing-value checks, structured error/warning reporting, explicit idempotency testing, and logging for robust, trustworthy, and debuggable results.
 
 **Assumptions made:**
 - Data is assumed to be de‑identified Epic‑style exports (CSV/JSON/Parquet).
