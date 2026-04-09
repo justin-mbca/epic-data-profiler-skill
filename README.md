@@ -21,11 +21,24 @@ This project implements a data-engineering skill for an LLM agent that ingests E
 
 ## Usage
 
+
 Run the skill from the command line:
 ```bash
 python -m skill.epic_data_profiler --file_path sample_data/sample_epic.csv
 python -m skill.epic_data_profiler --file_path sample_data/sample_epic.json
 python -m skill.epic_data_profiler --file_path sample_data/sample_epic.parquet
+```
+
+Or import and use in Python:
+```python
+from skill.epic_data_profiler import profile_epic_data
+result = profile_epic_data("sample_data/sample_epic.csv")
+print(result)
+```
+
+Run the script with:
+```bash
+PYTHONPATH=. python run_profiler.py
 ```
 
 ## Running Tests
