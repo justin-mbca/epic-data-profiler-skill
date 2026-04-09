@@ -1,3 +1,14 @@
+def test_profile_epic_data_idempotency():
+    """Test that running the profiler multiple times on the same file yields identical results (idempotency)."""
+    import tempfile
+    data = "PatientID,Age,LabResult\n1,25,4.2\n2,30,9.8\n3,,0.1\n4,99,\n"
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.csv', mode='w') as f:
+        f.write(data)
+        file_path = f.name
+    result1 = profile_epic_data(file_path)
+    result2 = profile_epic_data(file_path)
+    os.unlink(file_path)
+    assert result1 == result2
 import os
 import tempfile
 from skill.epic_data_profiler import profile_epic_data
