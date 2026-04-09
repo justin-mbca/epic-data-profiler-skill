@@ -74,5 +74,26 @@ This project is designed to fully address the “Data Engineering Take‑Home Ex
 **Optional / nice‑to‑have:**
 - The skill is designed so that an LLM agent can quickly inspect the profile and decide next steps (e.g., join, filter, enrich, or ask follow‑up questions).
 
+
+## Tool-Call Compatibility
+
+This skill is designed to be tool-call compatible with LLM APIs such as OpenAI function calling, Anthropic tool use, and LangChain tools. The main function signature is:
+
+```python
+def profile_epic_data(file_path: str, columns_to_profile: Optional[List[str]] = None) -> Dict[str, Any]
+```
+
+- **Input:**
+   - `file_path` (str): Path to the Epic data export (CSV, JSON, or Parquet)
+   - `columns_to_profile` (list of str, optional): Subset of columns to profile (default: all)
+- **Output:**
+   - Dict with keys:
+      - `summary`: Per-column statistics, types, warnings
+      - `errors`: List of error messages (if any)
+
+This function can be registered as a tool/function with any LLM agent framework. It is pure, deterministic, and does not require global state or side effects. See the docstring in `skill/epic_data_profiler.py` for detailed schema and example output.
+
+---
+
 ## Design Document
 See [DESIGN.md](DESIGN.md) for design rationale, interface, and data quality considerations.
