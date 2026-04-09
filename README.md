@@ -26,26 +26,11 @@ Run the skill from the command line:
 python -m skill.epic_data_profiler --file_path sample_data/sample_epic.csv
 python -m skill.epic_data_profiler --file_path sample_data/sample_epic.json
 python -m skill.epic_data_profiler --file_path sample_data/sample_epic.parquet
-python -m skill.epic_data_profiler --file_path sample_data/sample_epic_large.csv
-python -m skill.epic_data_profiler --file_path sample_data/sample_epic_large.json
-python -m skill.epic_data_profiler --file_path sample_data/sample_epic_large.parquet
-```
-
-Or import and use in Python:
-```python
-from skill.epic_data_profiler import profile_epic_data
-result = profile_epic_data(file_path='sample_data/sample_epic.csv')
-result = profile_epic_data(file_path='sample_data/sample_epic.json')
-result = profile_epic_data(file_path='sample_data/sample_epic.parquet')
-result = profile_epic_data(file_path='sample_data/sample_epic_large.csv')
-result = profile_epic_data(file_path='sample_data/sample_epic_large.json')
-result = profile_epic_data(file_path='sample_data/sample_epic_large.parquet')
-print(result)
 ```
 
 ## Running Tests
 ```bash
-pytest tests/
+PYTHONPATH=. pytest tests/
 ```
 
 ## Assignment Mapping: Part 1
