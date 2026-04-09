@@ -8,10 +8,10 @@ logging.basicConfig(level=logging.INFO)
 
 def profile_epic_data(file_path: str, columns_to_profile: Optional[List[str]] = None) -> Dict[str, Any]:
     """
-    Profiles an Epic EHR data export (CSV or JSON) and returns summary statistics and data quality warnings.
+    Profiles an Epic EHR data export (CSV, JSON, or Parquet) and returns summary statistics and data quality warnings.
 
     Args:
-        file_path (str): Path to the Epic data export (CSV or JSON).
+        file_path (str): Path to the Epic data export (CSV, JSON, or Parquet).
         columns_to_profile (Optional[List[str]]): Subset of columns to profile (default: all).
 
     Returns:
